@@ -1,3 +1,5 @@
+const { ipcRenderer } = require('electron');
+
 var vid, playbtn, seekslider, curtimetext, durtimetext, mutebtn, volumeslider, fullscreenbtn;
 function intializePlayer(){
 	// Set object references
@@ -14,8 +16,8 @@ function intializePlayer(){
 	seekslider.addEventListener("change",vidSeek,false);
 	vid.addEventListener("timeupdate",seektimeupdate,false);
 	mutebtn.addEventListener("click",vidmute,false);
-	volumeslider.addEventListener("change",setvolume,false);
-	fullscreenbtn.addEventListener("click",toggleFullScreen,false);
+        volumeslider.addEventListener("change",setvolume,false);
+        
 }
 window.onload = intializePlayer;
 function playPause(){
@@ -29,7 +31,7 @@ function playPause(){
 }
 function vidSeek(){
 	var seekto = vid.duration * (seekslider.value / 1000);
-	vid.currentTime = seekto;
+        vid.currentTime = seekto;
 }
 function seektimeupdate(){
 	var nt = vid.currentTime * (1000 / vid.duration);
@@ -44,6 +46,13 @@ function seektimeupdate(){
 	if(durmins < 10){ durmins = "0"+durmins; }
 	curtimetext.innerHTML = curmins+":"+cursecs;
 	durtimetext.innerHTML = durmins+":"+dursecs;
+        let Data = {
+                v: JSON.stringify(vid),
+                w: 640,
+                h: 480
+            };
+            
+    ipcRenderer.send('request-update-canvas-video', Data);
 }
 function vidmute(){
 	if(vid.muted){
@@ -57,3 +66,5 @@ function vidmute(){
 function setvolume(){
 	vid.volume = volumeslider.value / 100;
 }
+
+

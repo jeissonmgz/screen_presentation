@@ -1,48 +1,81 @@
 const electron = require ('electron')
 const {app, BrowserWindow} = electron
+const { ipcMain } = require('electron');
 
 const path = require("path")
 const url = require("url")
 
-let win
+let ventanaPresentacion
+let ventanaControles
 
-function createWindow() {
-        var electronScreen = electron.screen;
-        var displays = electronScreen.getAllDisplays();
-        var externalDisplay = null;
-        console.log (displays.length)
-        for (var i in displays) {
-          if (displays[i].bounds.x != 0 || displays[i].bounds.y != 0) {
-            externalDisplay = displays[i];
-            break;
+function getPantallaPresentacion() {
+        let electronScreen = electron.screen;
+        let pantallas = electronScreen.getAllDisplays();
+        let pantallaExterna = null;
+        for (var i in pantallas) {
+          if (pantallas[i].bounds.x != 0 || pantallas[i].bounds.y != 0) {
+            pantallaExterna = pantallas[i];
           }
         }
-        win = new BrowserWindow ( {
-                x: externalDisplay.bounds.x + 50,
-                y: externalDisplay.bounds.y + 50,
+        return pantallaExterna;
+}
+
+function configurarVentanaPresentacion(pantallaExterna) {
+        let ventanaPresentacion = new BrowserWindow ( {
+                x: pantallaExterna.bounds.x + 50,
+                y: pantallaExterna.bounds.y + 50,
                 width: 800,
                 height: 800
         } )
-
-        win.setFullScreen(true)
-        win.setMenu(null)
-
-        win.loadURL(url.format({
+        ventanaPresentacion.loadURL(url.format({
                 pathname: path.join(__dirname, 'index.html'),
                 protocol: 'file',
                 slashes: true
         }))
+        ventanaPresentacion.setFullScreen(true)
+        ventanaPresentacion.setMenu(null)
+        return ventanaPresentacion
+}
+
+function cargarVentanaPresentacion() {
+        let pantallaExterna = getPantallaPresentacion()
+        ventanaPresentacion = configurarVentanaPresentacion(pantallaExterna)
+        crearVentanaControles()
 }
 
 exports.openWindow = () => {
-        let newWin = new BrowserWindow ( { width: 400, height: 600} )
-        newWin.webContents.openDevTools()
-        newWin.loadURL(url.format({
+        ventanaControles = new BrowserWindow ( { width: 400, height: 600} )
+        //ventanaControles.webContents.openDevTools()
+        ventanaControles.loadURL(url.format({
                 pathname: path.join(__dirname, 'controles.html'),
                 protocol: 'file',
                 slashes: true
         }))
 
+        ipcMain.on('request-update-canvas-video', (event, arg) => {
+                // Request to update the label in the renderer process of the second window
+                secondWindow.webContents.send('action-update-canvas-video', arg);
+            });
+
 }
 
-app.on('ready', createWindow)
+function crearVentanaControles() {
+        ventanaControles = new BrowserWindow ( { width: 400, height: 600} )
+        ventanaControles.webContents.openDevTools()
+        ventanaPresentacion.webContents.openDevTools()
+        ventanaControles.loadURL(url.format({
+                pathname: path.join(__dirname, 'controles.html'),
+                protocol: 'file',
+                slashes: true
+        }))
+
+        ipcMain.on('request-update-canvas-video', (event, arg) => {
+                // Request to update the label in the renderer process of the second window
+                ventanaPresentacion.webContents.send('action-update-canvas-video', arg);
+            });
+}
+
+app.on('ready', cargarVentanaPresentacion)
+
+//https://codepen.io/caraya/pen/JbsGe
+//https://ourcodeworld.com/articles/read/536/how-to-send-information-from-one-window-to-another-in-electron-framework
