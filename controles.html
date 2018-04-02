@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<html lang="es">
+        <head>
+                <meta charset="UTF-8">
+                <title>Controles</title>
+                <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+                <link rel="stylesheet" type="text/css" href="node_modules/material-design-icons/iconfont/material-icons.css">
+                <link rel="stylesheet" type="text/css" href="css/slider.css">
+        </head>
+        <body>
+                        <video id="my_video" width="550" height="310" autoplay>
+                          <source src="agua.mp4">
+                        </video>
+                <div class="slidecontainer">
+                        <br>
+                        <input type="range" id="seekslider" min="0" max="1000" value="0" step="1" class="slider">
+                        <br>
+                        <button class="btn btn-primary"id="playpausebtn"><i class="material-icons">play_circle_outline</i></button>
+                        <span id="curtimetext">00:00</span> / <span id="durtimetext">00:00</span>
+                        <button id="mutebtn">Mute</button>
+                        <input type="range" id="volumeslider" min="0" max="100" value="100" step="1">
+                </div>
+                <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+                <script src="js/video.js"></script>
+        </body>
+</html>
