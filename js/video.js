@@ -28,10 +28,22 @@ function playPause(){
 		vid.pause();
 		playbtn.innerHTML = "Play";
 	}
+	
+	let data = {
+                funcion: "playPause",
+                valor: !vid.paused
+            };
+        ipcRenderer.send('request-update-canvas-video', data);
 }
 function vidSeek(){
 	var seekto = vid.duration * (seekslider.value / 1000);
         vid.currentTime = seekto;
+	
+	let data = {
+                funcion: "vidSeek",
+                valor: seekto
+            };
+        ipcRenderer.send('request-update-canvas-video', data);
 }
 function seektimeupdate(){
 	var nt = vid.currentTime * (1000 / vid.duration);
@@ -46,13 +58,6 @@ function seektimeupdate(){
 	if(durmins < 10){ durmins = "0"+durmins; }
 	curtimetext.innerHTML = curmins+":"+cursecs;
 	durtimetext.innerHTML = durmins+":"+dursecs;
-        let Data = {
-                v: JSON.stringify(vid),
-                w: 640,
-                h: 480
-            };
-            
-    ipcRenderer.send('request-update-canvas-video', Data);
 }
 function vidmute(){
 	if(vid.muted){

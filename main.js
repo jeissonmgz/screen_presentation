@@ -25,7 +25,8 @@ function configurarVentanaPresentacion(pantallaExterna) {
                 x: pantallaExterna.bounds.x + 50,
                 y: pantallaExterna.bounds.y + 50,
                 width: 800,
-                height: 800
+                height: 800,
+                show: false
         } )
         ventanaPresentacion.loadURL(url.format({
                 pathname: path.join(__dirname, 'index.html'),
@@ -43,9 +44,12 @@ function cargarVentanaPresentacion() {
         crearVentanaControles()
 }
 
+exports.mostrar = () => {
+        ventanaPresentacion.show()
+}
+
 exports.openWindow = () => {
         ventanaControles = new BrowserWindow ( { width: 400, height: 600} )
-        //ventanaControles.webContents.openDevTools()
         ventanaControles.loadURL(url.format({
                 pathname: path.join(__dirname, 'controles.html'),
                 protocol: 'file',
@@ -61,8 +65,6 @@ exports.openWindow = () => {
 
 function crearVentanaControles() {
         ventanaControles = new BrowserWindow ( { width: 400, height: 600} )
-        ventanaControles.webContents.openDevTools()
-        ventanaPresentacion.webContents.openDevTools()
         ventanaControles.loadURL(url.format({
                 pathname: path.join(__dirname, 'controles.html'),
                 protocol: 'file',

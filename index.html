@@ -5,45 +5,16 @@
                 <meta charset="UTF-8">
                 <title>Hola</title>
                 <style>
-                        #fullVideo {
-                                position: absolute;
-                                margin: 0 auto;
-                                top: 0;
-                                bottom: 0;
-                                left: 0;
-                                right: 0;
-                                width: 100%;
-                                height: 100%;
+                        body {
+                                background: black;
                         }
                 </style>
         </head>
         <body>
-                <canvas id='fullVideo'></canvas>
-                <span id="txt"></span>
+                <video id="my_video" width="100%" height="100%" autoplay>
+                        <source src="agua.mp4">
+                </video>
                 <script> require("./index.js") </script>
-                <script>
-                        const { ipcRenderer } = require('electron');
-                        txt.innerHTML = "Hola"
-                
-                        ipcRenderer.on('action-update-canvas-video', (event, arg) => {
-                        txt.innerHTML = (arg.v)
-                                
-                                draw (arg.v, arg.w, arg.h)
-                        });
-
-                        
-                        var canvas = document.getElementById('fullVideo');
-    canvas.width = 640;
-    canvas.height = 480;
-                        var context = canvas.getContext('2d');
-
-                        function draw(v,w,h) {
-                                
-                                if(v.paused || v.ended) return false;
-                                context.drawImage(v,0,0,w,h);
-                                //setTimeout(draw,20,v,w,h);
-                        }
-                </script>
         </body>
 </html>
 

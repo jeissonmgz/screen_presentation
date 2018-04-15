@@ -1,10 +1,24 @@
 const remote = require("electron").remote
 const main = remote.require("./main.js")
+const { ipcRenderer } = require('electron');
 
-let button = document.createElement("button")
-button.textContent = "Open Window"
-document.body.appendChild(button)
+vid = document.getElementById("my_video");      
+vid.muted = true;
 
-button.addEventListener("click", () => {
-        main.openWindow()
-})
+main.mostrar()
+
+ipcRenderer.on('action-update-canvas-video', (event, arg) => {
+        eval(arg.funcion)(arg.valor);
+});
+
+function playPause(ponerPlay){
+        if(ponerPlay){
+                vid.play();
+        } else {
+                vid.pause();
+        }
+}
+
+function vidSeek(seekto){
+        vid.currentTime = seekto;
+}
