@@ -7,13 +7,29 @@
                 <style>
                         body {
                                 background: black;
+                                padding: 0;
+                                margin: 0;
+                        }
+
+                        .centrar {
+                                display: flex;              /* establish flex container */
+                                flex-direction: column;     /* stack flex items vertically */
+                                justify-content: center;    /* center items vertically, in this case */
+                                align-items: center;        /* center items horizontally, in this case */
+                        }
+
+                        #area-trabajo {
+                                width: 100%;
+                                height: 100vh;
                         }
                 </style>
         </head>
         <body>
-                <video id="my_video" width="100%" height="100%" autoplay>
-                        <source src="agua.mp4">
-                </video>
+                <div class="centrar" id="area-trabajo">
+                        <video id="my_video" width="100%" height="100%" autoplay>
+                                <source src="agua.mp4">
+                        </video>
+                </div>
                 <script> require("./index.js") </script>
         </body>
 </html>

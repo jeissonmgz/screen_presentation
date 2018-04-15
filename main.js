@@ -8,6 +8,15 @@ const url = require("url")
 let ventanaPresentacion
 let ventanaControles
 
+var fs = require('fs');
+var files = fs.readdirSync('media/');
+
+console.log(files.length)
+
+files.forEach((file) => {
+        console.log(file)
+})
+
 function getPantallaPresentacion() {
         let electronScreen = electron.screen;
         let pantallas = electronScreen.getAllDisplays();
